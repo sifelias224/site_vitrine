@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,6 +8,15 @@
   <link rel="stylesheet" href="{% static 'galerie/style.css' %}">
 </head>
 <body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="{% url 'home' %}">Accueil</a></li>
+            <li><a href="{% url 'galerie' %}">Galerie</a></li>
+            <li><a href="{% url 'mosaique' %}">Mosaïque</a></li>
+            <li><a href="{% url 'a_propos' %}">À propos</a></li>
+            <li><a href="{% url 'contact' %}">Contact</a></li>
+        </ul>
+    </nav>
   <div class="background"></div>
 
   <div class="content">

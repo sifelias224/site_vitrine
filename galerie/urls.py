@@ -1,10 +1,10 @@
 from django.urls import path
 from . import views
 
-
-#Cette URL ('') correspond à la page d’accueil du site (racine /)
-#Elle est reliée à la vue galerie_view définie dans views.py
 urlpatterns = [
-    path('', views.home_view, name='home'),
+    path('', views.home, name='home'),
     path('galerie/', views.galerie_view, name='galerie'),
+    path('mosaique/', views.mosaique_view, name='mosaique'),
+    path('a-propos/', views.a_propos, name='a_propos'),
+    path('contact/', views.contact, name='contact'),
 ]

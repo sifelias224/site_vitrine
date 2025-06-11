@@ -4,10 +4,19 @@ from django.shortcuts import render
 
 from .models import Photo
 
-def galerie_view(request):
-    photos = Photo.objects.all().order_by('-date_creation')
-    return render(request, 'galerie/galerie.html', {'photos': photos})
+from django.shortcuts import render
 
-
-def home_view(request):
+def home(request):
     return render(request, 'galerie/home.html')
+
+def galerie_view(request):
+    return render(request, 'galerie/galerie.html')
+
+def mosaique_view(request):
+    return render(request, 'galerie/mosaique.html')
+
+def a_propos(request):
+    return render(request, 'galerie/a_propos.html')
+
+def contact(request):
+    return render(request, 'galerie/contact.html')
