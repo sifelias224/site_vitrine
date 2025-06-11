@@ -1,0 +1,145 @@
+/* ========== BASE ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  scroll-behavior: smooth;
+  font-family: 'Playfair Display', serif;
+  background: transparent;
+  overflow: hidden;
+}
+
+/* ========== CANVAS DE FOND ========== */
+#background-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+
+/* ========== NAVBAR DYNAMIQUE ========== */
+.navbar {
+  position: fixed;
+  top: -80px;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+  transition: top 0.3s ease;
+  display: flex;
+  justify-content: center;
+}
+
+.navbar--visible {
+  top: 0;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #222;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+  color: #1a73e8;
+}
+
+/* ========== GALERIE SLIDES ========== */
+.gallery-main {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+.slide {
+  scroll-snap-align: start;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+}
+
+/* ========== CONTENU D'UNE ŒUVRE ========== */
+.image-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  width: 90%;
+  position: relative;
+}
+
+.image-container img {
+  max-width: 60%;
+  max-height: 70vh;
+  object-fit: contain;
+  box-shadow: 0 0 10px rgba(0,0,0,0.08);
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.image-container .titre {
+  position: absolute;
+  bottom: -3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-size: 1.6rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 0.3rem 1rem;
+  border-radius: 6px;
+}
+
+/* Description sur le côté droit */
+.description-box {
+  max-width: 25%;
+  display: none;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: #333;
+}
+
+/* Affiche la description au survol */
+.image-container:hover .description-box,
+.image-container .titre:hover + .description-box {
+  display: block;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .image-container {
+    flex-direction: column;
+  }
+
+  .description-box {
+    max-width: 90%;
+    margin-top: 1rem;
+  }
+
+  .image-container .titre {
+    bottom: -2rem;
+    font-size: 1.4rem;
+  }
+}

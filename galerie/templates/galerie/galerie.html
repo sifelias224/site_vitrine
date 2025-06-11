@@ -1,0 +1,24 @@
+{% extends 'galerie/base.html' %}
+
+{% block title %}Galerie{% endblock %}
+{% block navstyle %}navbar--hidden{% endblock %}
+{% load static %}
+{% block content %}
+<main class="gallery-main">
+  {% for photo in photos %}
+ <section class="slide">
+  <div class="image-container">
+    <img src="{{ photo.image.url }}" alt="{{ photo.titre }}">
+    <div class="info">
+      <h2>{{ photo.titre }}</h2>
+      <p>{{ photo.description }}</p>
+    </div>
+  </div>
+</section>
+  {% empty %}
+  <section class="slide">
+    <p>Aucune œuvre pour le moment.</p>
+  </section>
+  {% endfor %}
+</main>
+{% endblock %}

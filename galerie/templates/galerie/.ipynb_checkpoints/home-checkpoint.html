@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Accueil — Galerie artistique</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'galerie/style.css' %}">
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+</head>
+<body>
+  <canvas id="background-canvas"></canvas>
+
+  <!-- Barre de navigation -->
+  <nav class="navbar">
+    <ul>
+      <li><a href="{% url 'home' %}">Accueil</a></li>
+      <li><a href="{% url 'galerie' %}">Galerie</a></li>
+      <li><a href="#">À propos</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="home-content">
+    <h1>Bienvenue dans la galerie</h1>
+    <p>Découvrez des œuvres inspirées, exposées dans un écrin artistique unique.</p>
+  </main>
+
+  <script src="{% static 'galerie/brume.js' %}"></script>
+</body>
+</html>

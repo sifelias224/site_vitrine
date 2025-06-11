@@ -1,0 +1,22 @@
+{% load static %}
+
+<!-- galerie/templates/galerie/base.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Ma galerie{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'galerie/style.css' %}">
+</head>
+<body>
+  <nav class="navbar {% block navstyle %}{% endblock %}">
+    <!-- Menu ici -->
+    <ul>
+      <li><a href="{% url 'home' %}">Accueil</a></li>
+      <li><a href="{% url 'galerie' %}">Galerie</a></li>
+    </ul>
+  </nav>
+
+  {% block content %}{% endblock %}
+</body>
+</html>
