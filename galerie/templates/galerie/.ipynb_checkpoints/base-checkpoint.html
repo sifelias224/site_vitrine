@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Site Vitrine Artistique{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'galerie/style.css' %}">
+</head>
+<body>
+  <div class="background"></div>
+
+  <div class="content">
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>

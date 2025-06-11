@@ -6,8 +6,10 @@
   <meta charset="UTF-8">
   <title>{% block title %}Site Vitrine Artistique{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'galerie/style.css' %}">
+  <script type="module" src="{% static 'galerie/brume.js' %}"></script>
 </head>
 <body>
+    <canvas id="brume-bg"></canvas>
     <nav class="navbar">
         <ul>
             <li><a href="{% url 'home' %}">Accueil</a></li>
@@ -22,5 +24,19 @@
   <div class="content">
     {% block content %}{% endblock %}
   </div>
+
+  <div class="social-bar">
+    <a href="https://www.instagram.com/tonprofil" target="_blank" title="Instagram">
+        <img src="{% static 'galerie/icons/instagram.svg' %}" alt="Instagram">
+    </a>
+
+    <a href="https://www.facebook.com/tonprofil" target="_blank" title="Facebook">
+        <img src="{% static 'galerie/icons/facebook.svg' %}" alt="Facebook">
+    </a>
+
+    <a href="mailto:contact@tonsite.fr" title="Email">
+        <img src="{% static 'galerie/icons/gmail.svg' %}" alt="Email">
+    </a>
+</div>
 </body>
 </html>
