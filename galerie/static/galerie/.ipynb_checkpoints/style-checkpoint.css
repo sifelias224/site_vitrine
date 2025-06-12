@@ -94,31 +94,22 @@ body {
 
 /* Contenu des slides */
 .slide-content {
-  width: 60%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 80%;
   max-width: 1000px;
-  height: auto;
-  min-height: 50vh;
-  margin: 25vh auto;
-  padding: 2rem;
+  min-height: 60vh;
+  margin: auto;
+  padding: 3rem 2rem;
   background-color: rgba(255, 255, 255, 0.85);
   border-radius: 1rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
 }
 
-/* Alternance gauche/droite */
-.slide-content.left {
-  text-align: left;
-}
-
-.slide-content.right {
-  text-align: right;
-}
-
-/* Titre slide (haut gauche/droite) */
+/* Titre */
 .slide-title {
   position: absolute;
   top: 30px;
@@ -138,20 +129,84 @@ body {
 
 /* Description en bas du bloc (25%) */
 .slide-description {
-  height: 25%;
-  padding: 1.5rem;
+  flex: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 1rem;
   font-size: 1.1rem;
+  max-width: 25%;
+  height: auto;
+}
+
+.slide-content.left .slide-description {
+  justify-content: flex-start;
+  margin-left: 40px;
+  margin-right: auto;
+  text-align: left;
+}
+
+.slide-content.right .slide-description {
+  justify-content: flex-end;
+  margin-right: 40px;
+  margin-left: auto;
+  text-align: right;
 }
 
 /* Preview (zone vide pour le moment) */
 .slide-preview {
+  flex: 1;
   height: 70%;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1rem;
+}
+
+/* ... [toutes les règles précédentes inchangées] ... */
+
+.slide-link-button {
+  position: absolute;
+  bottom: 30px;
+  background-color: royalblue;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  z-index: 2;
+  transition: background-color 0.3s ease;
+}
+
+.slide-content.left .slide-link-button {
+  left: 40px;
+  transform: none;
+  text-align: left;
+}
+
+.slide-content.right .slide-link-button {
+  right: 40px;
+  transform: none;
+  text-align: right;
+}
+
+.slide-link-button:hover {
+  background-color: #2744b4;
+}
+
+/* Responsive mobile */
+@media (max-width: 768px) {
+  .slide-link-button {
+    bottom: 20px;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    text-align: center !important;
+  }
 }
 
 /* Menu burger */
@@ -241,10 +296,19 @@ body {
   .slide-description {
     height: auto;
     padding: 1rem 0;
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: center;
   }
 
   .slide-preview {
     height: auto;
     padding: 1rem 0;
+  }
+
+  .slide-link-button {
+    bottom: 20px;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
   }
 }
