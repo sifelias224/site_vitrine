@@ -20,50 +20,44 @@ function init() {
   const material = new THREE.ShaderMaterial({
     uniforms: uniforms,
     fragmentShader: `
-  precision mediump float;
-  uniform float time;
-  uniform vec2 resolution;
+      precision mediump float;
+      uniform float time;
+      uniform vec2 resolution;
 
-  float random(vec2 st) {
-    return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
-  }
+      float hash(vec2 p) {
+        return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+      }
 
-  float noise(vec2 st) {
-    vec2 i = floor(st);
-    vec2 f = fract(st);
-    float a = random(i);
-    float b = random(i + vec2(1.0, 0.0));
-    float c = random(i + vec2(0.0, 1.0));
-    float d = random(i + vec2(1.0, 1.0));
-    vec2 u = f * f * (3.0 - 2.0 * f);
-    return mix(a, b, u.x) +
-           (c - a) * u.y * (1.0 - u.x) +
-           (d - b) * u.x * u.y;
-  }
+      float noise(vec2 p) {
+        vec2 i = floor(p);
+        vec2 f = fract(p);
+        float a = hash(i);
+        float b = hash(i + vec2(1.0, 0.0));
+        float c = hash(i + vec2(0.0, 1.0));
+        float d = hash(i + vec2(1.0, 1.0));
+        vec2 u = f * f * (3.0 - 2.0 * f);
+        return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+      }
 
-  void main() {
-    vec2 st = gl_FragCoord.xy / resolution.xy;
-    st.x *= resolution.x / resolution.y;
+      void main() {
+        vec2 uv = gl_FragCoord.xy / resolution.xy;
+        vec2 p = uv * 3.0;
 
-    float n = 0.0;
-    float scale = 2.0;
-    for (int i = 0; i < 5; i++) {
-      n += noise(st * scale + time * 0.05) / scale;
-      scale *= 2.0;
-    }
+        float t = time * 0.05;
 
-    // Onirique : tons toujours lumineux et pastels
-    vec3 base = vec3(0.85, 0.9, 0.95); // base claire bleutée
+        float n = noise(p + vec2(t, t));
+        float n2 = noise(p + vec2(-t, t * 1.5));
+        float n3 = noise(p + vec2(t * 1.2, -t));
 
-    vec3 color = base + vec3(
-      0.1 * sin(n * 2.0 + time * 0.2), // variation douce rouge
-      0.1 * cos(n * 1.5 + time * 0.1), // variation douce verte
-      0.1 * sin(n * 3.0 - time * 0.15) // variation douce bleue
-    );
+        vec3 color = vec3(
+          0.9 + 0.1 * sin(n * 6.0 + time * 0.2),
+          0.85 + 0.1 * cos(n2 * 6.0 + time * 0.15),
+          0.95 + 0.1 * sin(n3 * 6.0 + time * 0.1)
+        );
 
-    gl_FragColor = vec4(color, 1.0);
-  }
-`
+        gl_FragColor = vec4(color, 1.0);
+      }
+    `
   });
 
   const mesh = new THREE.Mesh(geometry, material);

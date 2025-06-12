@@ -1,109 +1,250 @@
-/* Fond commun à toutes les pages */
-body, html {
+* {
   margin: 0;
   padding: 0;
-  height: 100%;
-  font-family: 'Helvetica Neue', sans-serif;
-  overflow-x: hidden;
-  color: #fff;
-  background-color: #e8f4ff; /* fallback si WebGL désactivé */  
+  box-sizing: border-box;
 }
 
-.background {
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Arrière-plan animé */
+body {
+  position: relative;
+  background: #e0f7fa;
+}
+
+#fog-canvas {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  background-size: cover;
-  z-index: -1;
+  z-index: 0;
+  pointer-events: none;
+  display: block;
 }
 
-/* Zone de contenu */
-.content {
+/* Container scroll */
+.slides-container {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
   position: relative;
   z-index: 1;
-  padding: 4rem 2rem;
-  text-align: center;
 }
 
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: rgba(15, 15, 25, 0.6); /* semi-transparent pour laisser voir le fond */
-  backdrop-filter: blur(10px);
-  z-index: 10;
-}
-
-.navbar ul {
-  list-style: none;
-  margin: 0;
-  padding: 1rem 2rem;
+/* Slide générique */
+.slide {
+  height: 100vh;
+  width: 100vw;
+  scroll-snap-align: start;
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 2rem;
+  position: relative;
 }
 
-.navbar a {
-  color: #ffffff;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 1.1rem;
-  padding: 0.5rem;
-  transition: color 0.3s, background 0.3s;
-}
-
-.navbar a:hover {
-  color: #aad3ff;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-}
-
-.social-bar {
-  position: fixed;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
+/* Slide de bienvenue */
+.slide-welcome {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 10px;
-  background-color: rgba(15, 15, 25, 0.5);
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-  z-index: 999;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  background: transparent;
 }
 
-.social-bar img {
-  width: 24px;
-  height: 24px;
-  filter: brightness(1.2);
-  transition: transform 0.2s, filter 0.2s;
+/* Titre de bienvenue */
+.welcome-content h1 {
+  font-size: 3.5rem;
+  font-weight: normal;
+  color: black;
+  margin: 0;
 }
 
-.social-bar a:hover img {
-  transform: scale(1.2);
-  filter: brightness(2);
+/* Flèche animée */
+.scroll-down {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2.5rem;
+  color: black;
+  cursor: pointer;
+  animation: bounce 1.5s infinite;
+  opacity: 0.7;
 }
 
-/* Le canvas brume toujours en fond */
-#brume-bg {
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
+  40% { transform: translate(-50%, 10px); }
+  60% { transform: translate(-50%, 5px); }
+}
+
+/* Slide régulière : police élégante */
+.slide:not(.slide-welcome) {
+  font-family: 'Lora', serif;
+  color: #222;
+}
+
+/* Contenu des slides */
+.slide-content {
+  width: 60%;
+  max-width: 1000px;
+  height: auto;
+  min-height: 50vh;
+  margin: 25vh auto;
+  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+/* Alternance gauche/droite */
+.slide-content.left {
+  text-align: left;
+}
+
+.slide-content.right {
+  text-align: right;
+}
+
+/* Titre slide (haut gauche/droite) */
+.slide-title {
+  position: absolute;
+  top: 30px;
+  font-size: 2rem;
+  margin: 0;
+}
+
+.slide-content.left .slide-title {
+  left: 40px;
+  text-align: left;
+}
+
+.slide-content.right .slide-title {
+  right: 40px;
+  text-align: right;
+}
+
+/* Description en bas du bloc (25%) */
+.slide-description {
+  height: 25%;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+}
+
+/* Preview (zone vide pour le moment) */
+.slide-preview {
+  height: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* Menu burger */
+.burger-menu {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 30px;
+  height: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+.burger-menu .bar {
+  height: 4px;
+  width: 100%;
+  background-color: #333;
+  border-radius: 2px;
+}
+
+/* Menu latéral */
+.side-menu {
   position: fixed;
   top: 0;
-  left: 0;
-  z-index: -100;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
+  left: -250px;
+  height: 100%;
+  width: 250px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease;
+  z-index: 9998;
+  padding-top: 60px;
 }
 
-/* Le reste du contenu */
-.content {
-  position: relative;
-  z-index: 1;
-  padding: 4rem 2rem;
-  color: white;
+.side-menu.open {
+  left: 0;
+}
+
+.side-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.side-menu li {
+  padding: 15px 20px;
+}
+
+.side-menu a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #333;
+  transition: color 0.2s ease;
+}
+
+.side-menu a:hover {
+  color: #0077cc;
+}
+
+/* Responsive mobile */
+@media (max-width: 768px) {
+  .slide-content {
+    width: 90%;
+    margin: 0 auto;
+    padding: 1.5rem;
+    text-align: center;
+    position: static;
+    min-height: auto;
+    box-sizing: border-box;
+  }
+
+  .slide-title {
+    position: static;
+    margin-bottom: 1rem;
+    text-align: center !important;
+  }
+
+  .slide-body {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .slide-description {
+    height: auto;
+    padding: 1rem 0;
+  }
+
+  .slide-preview {
+    height: auto;
+    padding: 1rem 0;
+  }
 }

@@ -1,8 +1,215 @@
-{% extends 'galerie/base.html' %}
+{% load static %}
 
-{% block title %}Accueil{% endblock %}
 
-{% block content %}
-  <h1>Bienvenue dans l'univers artistique</h1>
-  <p>Explorez la galerie, les thèmes, les inspirations…</p>
-{% endblock %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Accueil - Site Vitrine</title>
+  <link rel="stylesheet" href="{% static 'galerie/style.css' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=UnifrakturCook&family=Sacramento&family=Cormorant+Upright&family=Dancing+Script&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <canvas id="fog-canvas"></canvas>
+  <!-- Menu burger -->
+  <div class="burger-menu" onclick="toggleMenu()">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
+
+  <!-- Menu déroulant -->
+  <nav id="side-menu" class="side-menu">
+    <ul>
+      <li><a href="{% url 'home' %}">Accueil</a></li>
+      <li><a href="{% url 'galerie' %}">Galerie</a></li>
+      <li><a href="{% url 'mosaique' %}">Mosaïque</a></li>
+      <li><a href="{% url 'a_propos' %}">À propos</a></li>
+      <li><a href="{% url 'contact' %}">Contact</a></li>
+    </ul>
+  </nav>
+
+<!-- Slides -->
+<div class="slides-container">
+
+  <!-- Slide de bienvenue -->
+  <section class="slide slide-welcome">
+    <div class="welcome-content">
+      <h1>L’univers de Martine Langlois</h1>
+      <div class="scroll-down" onclick="scrollToNext()">&#x2193;</div>
+    </div>
+  </section>
+
+  <!-- Slide Galerie -->
+  <section class="slide slide-1">
+    <div class="slide-content left">
+      <h1 class="slide-title">Galerie</h1>
+      <div class="slide-description">
+        <p>Un aperçu de vos œuvres avec navigation par glissement visuel.</p>
+      </div>
+      <div class="slide-preview">
+        <!-- futur aperçu ici -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide Mosaïque -->
+  <section class="slide slide-2">
+    <div class="slide-content right">
+      <h1 class="slide-title">Mosaïque</h1>
+      <div class="slide-description">
+        <p>Une grille dynamique pour voir toutes les œuvres d’un coup d’œil.</p>
+      </div>
+      <div class="slide-preview">
+        <!-- futur aperçu ici -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide À propos -->
+  <section class="slide slide-3">
+    <div class="slide-content left">
+      <h1 class="slide-title">À propos</h1>
+      <div class="slide-description">
+        <p>Découvrez la vision artistique et le parcours de l’auteur(e).</p>
+      </div>
+      <div class="slide-preview">
+        <!-- futur aperçu ici -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide Contact -->
+  <section class="slide slide-4">
+    <div class="slide-content right">
+      <h1 class="slide-title">Contact</h1>
+      <div class="slide-description">
+        <p>Pour prendre rendez-vous, poser des questions ou collaborer.</p>
+      </div>
+      <div class="slide-preview">
+        <!-- futur aperçu ici -->
+      </div>
+    </div>
+  </section>
+
+</div>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById("side-menu").classList.toggle("open");
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
+<script>
+  const canvas = document.getElementById("fog-canvas");
+  canvas.style.position = "fixed";
+  canvas.style.top = 0;
+  canvas.style.left = 0;
+  canvas.style.width = "100%";
+  canvas.style.height = "100%";
+  canvas.style.zIndex = -1;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+
+  const geometry = new THREE.PlaneGeometry(2, 2);
+  const material = new THREE.ShaderMaterial({
+    uniforms: {
+      time: { value: 0.0 }
+    },
+    fragmentShader: `
+      uniform float time;
+
+vec2 hash(vec2 p) {
+    p = vec2(dot(p, vec2(127.1, 311.7)),
+             dot(p, vec2(269.5, 183.3)));
+    return -1.0 + 2.0*fract(sin(p)*43758.5453123);
+}
+
+float noise(in vec2 p) {
+    const float K1 = 0.366025404; // (sqrt(3)-1)/2;
+    const float K2 = 0.211324865; // (3-sqrt(3))/6;
+
+    vec2 i = floor(p + (p.x + p.y)*K1);
+    vec2 a = p - i + (i.x + i.y)*K2;
+    vec2 o = step(a.yx, a.xy);
+    vec2 b = a - o + K2;
+    vec2 c = a - 1.0 + 2.0*K2;
+
+    vec3 h = max(0.5 - vec3(dot(a,a), dot(b,b), dot(c,c)), 0.0);
+    vec3 n = h*h*h*h*vec3(dot(a, hash(i + 0.0)),
+                          dot(b, hash(i + o)),
+                          dot(c, hash(i + 1.0)));
+
+    return dot(n, vec3(70.0));
+}
+
+void main() {
+    vec2 uv = gl_FragCoord.xy / vec2(1000.0, 800.0);
+    float t = time * 0.05;
+
+    float n = noise(uv * 3.0 + t);
+
+    vec3 color1 = vec3(0.6, 0.8, 1.0); // bleu pastel
+    vec3 color2 = vec3(1.0, 0.7, 0.8); // rose pastel
+    vec3 color3 = vec3(0.7, 1.0, 0.8); // vert menthe
+
+    vec3 color = mix(color1, color2, sin(n + t));
+    color = mix(color, color3, 0.5 * cos(n * 2.0 - t));
+
+    gl_FragColor = vec4(color, 1.0);
+}
+    `
+  });
+
+  const mesh = new THREE.Mesh(geometry, material);
+  scene.add(mesh);
+
+  camera.position.z = 1;
+
+  function animate() {
+    requestAnimationFrame(animate);
+    material.uniforms.time.value += 0.05;
+    renderer.render(scene, camera);
+  }
+
+  animate();
+
+  window.addEventListener('resize', () => {
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+});
+</script>
+
+<script>
+  function scrollToNext() {
+    const nextSlide = document.querySelectorAll('.slide')[1];
+    if (nextSlide) {
+      nextSlide.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+</script>
+
+<script>
+  const artisticFonts = [
+    "'Great Vibes', cursive",
+    "'UnifrakturCook', cursive",
+    "'Sacramento', cursive",
+    "'Cormorant Upright', serif",
+    "'Dancing Script', cursive"
+  ];
+
+  const chosenFont = artisticFonts[Math.floor(Math.random() * artisticFonts.length)];
+  const welcomeTitle = document.querySelector('.welcome-content h1');
+  welcomeTitle.style.fontFamily = chosenFont;
+</script>
+
+</body>
+</html>
